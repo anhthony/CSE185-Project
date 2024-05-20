@@ -16,7 +16,9 @@ Once all the prerequisitive packages are installed, you can now install VarDetec
 git clone [insert link to repo]
 cd [name of directory]
 ```
-Note: if you do not have root access, you can run the command above with additional options to install locally:
-
+# Usage
+```
+vardetect 
+```
 
 
