@@ -1,2 +1,3 @@
-# CSE185-Project
-Final Project for CSE185
+# VarDetect
+`vardetect` is a 
+
