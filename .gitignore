@@ -1,2 +1,3 @@
 # Ignore program generated output files
-.vcfss
+*.vcfss
+*.vcf

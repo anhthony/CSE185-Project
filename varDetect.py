@@ -1,6 +1,7 @@
 import multiprocessing
 from skbio import DNA
 from tqdm import tqdm
+import argparse as ap
 
 # TODO: tqdm prog bars(one for overall, one for curr file), call for multiple input files(process one by one, don't need to parallel), validation?
 
@@ -65,14 +66,38 @@ def process_chunk(chunk, refbf):
 
 # Main
 if __name__ == '__main__':
+    parser = ap.ArgumentParser(usage="python varDetect.py --mpileup-file [.mpileup file] --output-vcf [.vcf file] [OPTIONS]", 
+                               description="VarDetect: A variant detection tool")
+
+    parser.add_argument('--ref-genome', '-r', required=True, type = str, metavar="REF.fa", help = 'Reference genome')
+    parser.add_argument('--mpileup-file', '-m', required=True,type = str, metavar="NAME.mpileup", help = 'The mpileup file to run variant detection on.')
+    parser.add_argument('--output-vcf', '-o', required=True, type = str, metavar="NAME.vcf", help = 'Output file in VCF format; provide [filename].vcf')
+    parser.add_argument('--min-coverage', type = int, default = 8, metavar="INT", help = 'Minimum coverage at a position to make a variant call; default: 8')
+    parser.add_argument('--min-reads', type = int, default = 2, help = 'Min supporting reads at a position; default: 2')
+    parser.add_argument('--min-avg-qual', type = int, default = 15, help = 'Min average base quality at a position; default: 15')
+    parser.add_argument('--min-var-freq', type = float, default = 0.01, help = 'Min variant allele freq threshold; default: 0.02')
+    parser.add_argument('--min-freq-for-hom', type = float, default = 0.75, help = 'Minimum frequency to call homozygote; default: 0.75')
+    parser.add_argument('--p-value', type = float, default = 0.01, help = 'P-value threshold for calling variants; default: 0.01')
+    args = parser.parse_args()
+    args_dict = vars(args)
+    
+    pile_up = args_dict["mpileup_file"]
+    ref_genome = args_dict["ref_genome"]
+    min_cov = args_dict["min_coverage"]
+    min_reads = args_dict["min_reads"]
+    min_avg_qual = args_dict["min_avg_qual"]
+    min_var_freq = args_dict["min_var_freq"]
+    min_freq_for_hom = args_dict["min_freq_for_hom"]
+    p_val = args_dict["p_value"]
+    output_vcf = args_dict["output_vcf"]
+    
     # Paths are hardcoded!
     print("Reading in pileup...")
-    pile_up = "/Users/ethanxu/scratch/185_proj/CSE185-Project/data/NA18555.mpileup"
-    ref_genome = "/Users/ethanxu/Downloads/hg38.fa"
     with open(pile_up) as f:
         pileup_data = f.readlines()
 
     # Get the base frequencies from the genome of interest 
+    print("Getting nucleotide frequencies from reference genome...")
     refg = DNA.read(ref_genome, lowercase=True)
     refgbf = refg.frequencies()
     totalb = sum(refgbf.values())
@@ -98,7 +123,7 @@ if __name__ == '__main__':
 
     # Print to output file 
     print("Writing variants to output file...")
-    with open("analysis.vcfss", "w") as f:
+    with open(output_vcf, "w") as f:
         f.write("CHROM\tPOS\tREF\tALT\tQUAL\n")
         for entry in flat_out_data:
             if entry["REF"] != entry.get("ALT", "") and entry.get("ALT", "") != "":
