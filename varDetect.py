@@ -66,6 +66,7 @@ def process_chunk(chunk, refbf):
 
 # Main
 if __name__ == '__main__':
+    #Set up to parse command line arguments
     parser = ap.ArgumentParser(usage="python varDetect.py --mpileup-file [.mpileup file] --output-vcf [.vcf file] [OPTIONS]", 
                                description="VarDetect: A variant detection tool")
 
@@ -81,6 +82,7 @@ if __name__ == '__main__':
     args = parser.parse_args()
     args_dict = vars(args)
     
+    #Retrieve command args
     pile_up = args_dict["mpileup_file"]
     ref_genome = args_dict["ref_genome"]
     min_cov = args_dict["min_coverage"]
@@ -91,7 +93,7 @@ if __name__ == '__main__':
     p_val = args_dict["p_value"]
     output_vcf = args_dict["output_vcf"]
     
-    # Paths are hardcoded!
+    #Read mpileup file
     print("Reading in pileup...")
     with open(pile_up) as f:
         pileup_data = f.readlines()
