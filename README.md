@@ -19,10 +19,10 @@ python vardetect (?)
 
 # Usage Options
 ```VarDetect``` has the following required arguments:   
-  ```[input].mpileup```: a text file that represents the alignment of sequence reads to a reference genome    
-  ```[output].vcfss```: a text file that stores the gene sequence variants indentified from  ```VarDetect```  
+```[ref genome].fa```: the reference genome   
+```[input].mpileup```: a text file that represents the alignment of sequence reads to a reference genome    
+```[output].vcfss```: a text file that stores the gene sequence variants indentified from  ```VarDetect```  
 
-```--output-vcf```:   
 ```--min-coverage```: specify the minimum coverage at a position (default is 8)  
 ```--min-reads```: specify the number of reads at a position (default 3)  
 ```--min-avg-qual 20``` specify the minimum average base quality (default 15)  
