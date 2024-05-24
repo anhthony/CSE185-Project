@@ -18,8 +18,8 @@ python vardetect (?)
 ```
 
 # Usage Options
-```VarDetect``` has the following required arguments: 
-  ```[input].mpileup```: a text file that represents the alignment of sequence reads to a reference genome  
+```VarDetect``` has the following required arguments:   
+  ```[input].mpileup```: a text file that represents the alignment of sequence reads to a reference genome    
   ```[output].vcfss```: a text file that stores the gene sequence variants indentified from  ```VarDetect```  
 
 ```--output-vcf```:   
