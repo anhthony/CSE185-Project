@@ -1,5 +1,5 @@
 # VarDetect
-`VarDetect` is a Python package that detects single nucleotide polymorphism (SNPs) between 1 or more datasets against the human hg19 reference genome. It identifies if there are variants at a positions of a region of a chromosome as specified by the user. (?)
+`VarDetect` is a Python package that detects single nucleotide polymorphism (SNPs) between 1 or more samples against a specified reference genome. It identifies if there are variants in these samples at specific positions at given chromosomes.
 
 # Prerequisites
 Required packages can be installed with the included requirements file:
