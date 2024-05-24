@@ -14,13 +14,13 @@ cd CSE185-Project
 ```
 # Usage
 ```
-python varDetect.py --ref-genome [ref genome file] --mpileup-file [.mpileup file] --output-vcf [.vcf file] [OPTIONS]
+python varDetect.py --ref-genome [.fa ref genome file] --mpileup-file [.mpileup file] --output-vcf [.vcf file] [OPTIONS]
 ```
 
 # Usage Options
 ```VarDetect``` has the following required arguments:   
     
-```-r``` ```--ref-genome```: specify the reference genome   
+```-r``` ```--ref-genome```: specify the reference genome  
 ```-m``` ```--mpileup-file```: a text file that represents the alignment of sequence reads to a reference genome    
 ```-o``` ```--output-vcf```: a text file that stores the gene sequence variants indentified from  ```VarDetect```  
    
