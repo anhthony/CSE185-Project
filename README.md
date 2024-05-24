@@ -38,9 +38,9 @@ python varDetect.py --ref-genome [.fa ref-genome file] --mpileup-file [.mpileup 
 # Usage Options
 ## Required Arguments 
     
-`-r`/`--ref-genome`: a FASTA-formatted reference genome file. More info here [here](https://zhanggroup.org/FASTA/#:~:text=FASTA%20format%20is%20a%20text,by%20lines%20of%20sequence%20data.).   
-`-m`/ `--mpileup-file`: a `.mpileup` file that contains pileups of reads at a single genomic position. More info [here](https://www.htslib.org/doc/samtools-mpileup.html).  
-`-o`/`--output-vcf`: output `.vcf` file to write all variants to. More info [here](https://samtools.github.io/hts-specs/VCFv4.2.pdf)
+`-r`/`--ref-genome` `[.fa file]`: specify a FASTA-formatted reference genome file. More info here [here](https://zhanggroup.org/FASTA/#:~:text=FASTA%20format%20is%20a%20text,by%20lines%20of%20sequence%20data.).   
+`-m`/ `--mpileup-file` `[.mpileup file]`: a `.mpileup` file that contains pileups of reads at a single genomic position. More info [here](https://www.htslib.org/doc/samtools-mpileup.html).  
+`-o`/`--output-vcf` `[name_here.vcf]`: a `.vcf` file to write all variants to. The program will create a `vcf` directory if one doesn't already exist and put the output file here. More info [here](https://samtools.github.io/hts-specs/VCFv4.2.pdf).
 
 ## Optional Arguments
 There are also many optional arguments to provide additional specifications towards variant calling:  
