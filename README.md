@@ -22,7 +22,7 @@ python varDetect.py --ref-genome [.fa ref-genome file] --mpileup-file [.mpileup 
     
 ```-r``` ```--ref-genome```: specify the reference genome  
 ```-m``` ```--mpileup-file```: a text file that represents the alignment of sequence reads to a reference genome    
-```-o``` ```--output-vcf```: a text file that stores the gene sequence variants indentified from  ```VarDetect```  
+```-o``` ```--output-vcf```: a text file that stores the gene sequence variants identified from  ```VarDetect```  
    
 There are also many optional arguments to provide additional specifications toward variant calling:  
    
@@ -34,14 +34,24 @@ There are also many optional arguments to provide additional specifications towa
 
 # File Formats
 ```ref_genome.fa```   
+   
 The reference genome is in FASTA format and it contains the following information:
 ```
 >chr[name]
 [chromosome sequence]
 ```
-   
+
+      
 ```input.mpileup```   
-The mpileup file is what ```VarDetect``` takes in to run variant detection on. It is a tab delimited text file that represents the alignment of sequence reads to a reference genome 
+   
+The mpileup file is what ```VarDetect``` takes in to run variant detection on. It is a tab delimited text file that represents the alignment of sequence reads to a reference genome. It contains the following data
 ```
-Chromosome    Position    Ref Base    Read Depth    Read Based    Quality Score
+Chromosome    Position    Ref Base    Coverage    Read Bases    Quality Score
+```
+    
+```output.vcfss```   
+    
+The vcfss output file is a tab delimited text file that stores the gene sequence variants identified from  ```VarDetect```. It contains the following data:
+```
+Chromosome    Position    Ref Base    Alternative Base    Quality Score
 ```
