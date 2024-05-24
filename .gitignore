@@ -1,3 +1,7 @@
 # Ignore program generated output files
 *.vcfss
 *.vcf
+data/
+mpileup/
+testing/
+vcf/

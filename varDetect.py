@@ -2,6 +2,8 @@ import multiprocessing
 from skbio import DNA
 from tqdm import tqdm
 import argparse as ap
+import time
+import os
 
 # TODO: tqdm prog bars(one for overall, one for curr file), call for multiple input files(process one by one, don't need to parallel), validation?
 
@@ -46,22 +48,26 @@ def var_call(crchrom, crpos, refb, readc, bpile, crqual, refbf):
 # Function to process each chunk 
 def process_chunk(chunk, refbf):
     out_data = []
-    for line in chunk:
-        rdata = line.split("\t")
-        cr_chrom = rdata[0]
-        cr_pos = int(rdata[1])
-        cr_ref = rdata[2]
-        cr_reads = int(rdata[3])
-        cr_bases = rdata[4]
-        cr_qual = rdata[5]
-        
-        # Skip rows with no reads 
-        if cr_reads == 0:
-            continue
-        
-        # Perform variant calling for the row and append it to 
-        tba = var_call(cr_chrom, cr_pos, cr_ref, cr_reads, cr_bases, cr_qual, refbf)
-        out_data.append(tba)
+    with tqdm(total=len(chunk), unit=" rows") as pbar:
+        for line in chunk:
+            rdata = line.split("\t")
+            cr_chrom = rdata[0]
+            cr_pos = int(rdata[1])
+            cr_ref = rdata[2]
+            cr_reads = int(rdata[3])
+            cr_bases = rdata[4]
+            cr_qual = rdata[5]
+            
+            # Skip rows with no reads 
+            if cr_reads == 0:
+                continue
+            
+            # Perform variant calling for the row and append it to 
+            tba = var_call(cr_chrom, cr_pos, cr_ref, cr_reads, cr_bases, cr_qual, refbf)
+            out_data.append(tba)
+            
+            time.sleep(0.5/len(chunk)) #Delay to see progress bar 
+            pbar.update(1) #Update progress bar
     return out_data
 
 # Main
@@ -94,7 +100,7 @@ if __name__ == '__main__':
     output_vcf = args_dict["output_vcf"]
     
     #Read mpileup file
-    print("Reading in pileup...")
+    print("Reading in %s..." %(os.path.basename(pile_up)))
     with open(pile_up) as f:
         pileup_data = f.readlines()
 
@@ -110,21 +116,28 @@ if __name__ == '__main__':
     chunk_n = multiprocessing.cpu_count()
     chunk_s = len(pileup_data) // chunk_n
     chunks = [pileup_data[i:i + chunk_s] for i in range(0, len(pileup_data), chunk_s)]
+    print("Splitted data into %d chunks..." %(len(chunks)))
 
     # Perform variant calling utilizing multiprocessing
-    print("Finding variants...")
+    print("Finding variants in each chunk...")
     pool = multiprocessing.Pool(processes=chunk_n)
     results = []
+    
+    i = 1
     for chunk in chunks:
+        print("Processing rows in chunk %d:" %(i))
         result = pool.apply_async(process_chunk, args=(chunk, basef))
         chunk_d = result.get()
         results.append(chunk_d)
+        i += 1
+    
+    print("All variants found!")
 
     # Flatten the list of results
     flat_out_data = [item for sublist in results for item in sublist]
 
     # Print to output file 
-    print("Writing variants to output file...")
+    print("Writing variants to %s..." %(output_vcf))
     with open(output_vcf, "w") as f:
         f.write("CHROM\tPOS\tREF\tALT\tQUAL\n")
         for entry in flat_out_data:
