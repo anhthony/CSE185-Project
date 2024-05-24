@@ -19,7 +19,12 @@ After installing VarDetect, run the following command to install additional requ
 pip install -r requirements.txt
 ```
 
-# Mpileup File Generation
+# Data Generation
+`VarDetect` requires two inputs, the `.mpileup` file and the reference genome of the data in the `.mpileup` file. 
+## Mpileup File Generation
+
+****THIS STEP IS OPTIONAL**
+
 Provided with VarDetect is a bash script named `makePileUp.sh` to help convert `.sam`/`.cram` files into a `.mpileup` file. When running it for the first time, run `chmod +x makePileUp.sh` to make it an executable. To run the script, `samtools` is required, installation instructions can be found [here](https://www.htslib.org/download/).
 
 To run the script, the usage is `./makePileUp.sh [.sam OR .cram file] [reference genome] [region]`.
@@ -30,6 +35,9 @@ Arguments:\
 `[reference genome]`: a `.fa` reference genome file.
 
 `[region]`: region of the chromosome to look at. The format is `chrNUM:start-end` and the format is 1-indexed. For example, `chr4:10500-11000` means the 10500th nucleotide to the 11000th nucleotide on chromosome 4.
+
+## Reference Genome
+The reference genome file can be obtained online by referring to metadata about the `.sam`/`.cram`/`.mpileup` file. Ensure that you select the correct reference genome for the data that you are studying. 
 # Usage
 ```
 python varDetect.py --ref-genome [.fa ref-genome file] --mpileup-file [.mpileup file] --output-vcf [.vcf file] [OPTIONS]
