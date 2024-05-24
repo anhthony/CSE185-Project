@@ -29,9 +29,9 @@ There are also many optional arguments to provide additional specifications towa
 ```--min-coverage```: specify the minimum coverage at a position (default is 8)  
 ```--min-reads```: specify the number of reads at a position (default 2)  
 ```--min-avg-qual``` specify the minimum average base quality (default 15)  
-```--min-var-freq```: specifiy the minumum variant allele frequency threshold (default 0.02) 
-```--min-freq-for-hom```: specify the minimum frequency to call homozygote (default 0.75)
-```--p-value```: specify the p-value threshold for calling variants (default 0.01)
+```--min-var-freq```: specifiy the minumum variant allele frequency threshold (default 0.02)  
+```--min-freq-for-hom```: specify the minimum frequency to call homozygote (default 0.75)   
+```--p-value```: specify the p-value threshold for calling variants (default 0.01)   
 
 # File Formats
 ```ref_genome.fa```   
