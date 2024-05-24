@@ -14,7 +14,7 @@ cd CSE185-Project
 ```
 # Usage
 ```
-python vardetect (?)
+python varDetect.py --ref-genome [ref genome file] --mpileup-file [.mpileup file] --output-vcf [.vcf file] [OPTIONS]
 ```
 
 # Usage Options
