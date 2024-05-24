@@ -18,9 +18,9 @@ python vardetect (?)
 ```
 
 # Usage Options
-```--output-vcf```
-```--min-coverage 10```
-```--min-reads 3```
-```--min-avg-qual 20````
-```--min-var-freq 0.05```
-```--p-value 0.95```
+```--output-vcf```: 
+```--min-coverage```: specify the minimum coverage at a position (default is 8)
+```--min-reads```: specify the number of reads at a position (default 3)
+```--min-avg-qual 20``` specify the minimum average base quality (default 15)
+```--min-var-freq 0.05```: specifiy the minumum variant allele frequency threshold (default 0.02)
+```--p-value```: specify the p-value threshold for calling variants
