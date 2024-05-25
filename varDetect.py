@@ -2,6 +2,8 @@ import multiprocessing
 from skbio import DNA
 from tqdm import tqdm
 import argparse as ap
+import time
+import os
 
 # TODO: tqdm prog bars(one for overall, one for curr file), call for multiple input files(process one by one, don't need to parallel), validation?
 
@@ -46,22 +48,26 @@ def var_call(crchrom, crpos, refb, readc, bpile, crqual, refbf):
 # Function to process each chunk 
 def process_chunk(chunk, refbf):
     out_data = []
-    for line in chunk:
-        rdata = line.split("\t")
-        cr_chrom = rdata[0]
-        cr_pos = int(rdata[1])
-        cr_ref = rdata[2]
-        cr_reads = int(rdata[3])
-        cr_bases = rdata[4]
-        cr_qual = rdata[5]
-        
-        # Skip rows with no reads 
-        if cr_reads == 0:
-            continue
-        
-        # Perform variant calling for the row and append it to 
-        tba = var_call(cr_chrom, cr_pos, cr_ref, cr_reads, cr_bases, cr_qual, refbf)
-        out_data.append(tba)
+    with tqdm(total=len(chunk), unit=" rows") as pbar:
+        for line in chunk:
+            rdata = line.split("\t")
+            cr_chrom = rdata[0]
+            cr_pos = int(rdata[1])
+            cr_ref = rdata[2]
+            cr_reads = int(rdata[3])
+            cr_bases = rdata[4]
+            cr_qual = rdata[5]
+            
+            # Skip rows with no reads 
+            if cr_reads == 0:
+                continue
+            
+            # Perform variant calling for the row and append it to 
+            tba = var_call(cr_chrom, cr_pos, cr_ref, cr_reads, cr_bases, cr_qual, refbf)
+            out_data.append(tba)
+            
+            time.sleep(0.5/len(chunk)) #Delay to see progress bar 
+            pbar.update(1) #Update progress bar
     return out_data
 
 # Main
@@ -72,13 +78,13 @@ if __name__ == '__main__':
 
     parser.add_argument('--ref-genome', '-r', required=True, type = str, metavar="REF.fa", help = 'Reference genome')
     parser.add_argument('--mpileup-file', '-m', required=True,type = str, metavar="NAME.mpileup", help = 'The mpileup file to run variant detection on.')
-    parser.add_argument('--output-vcf', '-o', required=True, type = str, metavar="NAME.vcf", help = 'Output file in VCF format; provide [filename].vcf')
+    parser.add_argument('--output-vcfss', '-o', required=True, type = str, metavar="NAME.vcfss", help = 'Output file in VCFss (VCF subset) format; provide [filename].vcfss')
     parser.add_argument('--min-coverage', type = int, default = 8, metavar="INT", help = 'Minimum coverage at a position to make a variant call; default: 8')
     parser.add_argument('--min-reads', type = int, default = 2, help = 'Min supporting reads at a position; default: 2')
     parser.add_argument('--min-avg-qual', type = int, default = 15, help = 'Min average base quality at a position; default: 15')
     parser.add_argument('--min-var-freq', type = float, default = 0.01, help = 'Min variant allele freq threshold; default: 0.02')
     parser.add_argument('--min-freq-for-hom', type = float, default = 0.75, help = 'Minimum frequency to call homozygote; default: 0.75')
-    parser.add_argument('--p-value', type = float, default = 0.01, help = 'P-value threshold for calling variants; default: 0.01')
+    parser.add_argument('--min-threshold', type = float, default = 0, help = 'Minimum percent threshold for calling variants; default: 0')
     args = parser.parse_args()
     args_dict = vars(args)
     
@@ -90,11 +96,11 @@ if __name__ == '__main__':
     min_avg_qual = args_dict["min_avg_qual"]
     min_var_freq = args_dict["min_var_freq"]
     min_freq_for_hom = args_dict["min_freq_for_hom"]
-    p_val = args_dict["p_value"]
-    output_vcf = args_dict["output_vcf"]
+    min_thres = args_dict["min_threshold"]
+    output_vcfss = args_dict["output_vcfss"]
     
     #Read mpileup file
-    print("Reading in pileup...")
+    print("Reading in %s..." %(os.path.basename(pile_up)))
     with open(pile_up) as f:
         pileup_data = f.readlines()
 
@@ -110,22 +116,29 @@ if __name__ == '__main__':
     chunk_n = multiprocessing.cpu_count()
     chunk_s = len(pileup_data) // chunk_n
     chunks = [pileup_data[i:i + chunk_s] for i in range(0, len(pileup_data), chunk_s)]
+    print("Splitted data into %d chunks..." %(len(chunks)))
 
     # Perform variant calling utilizing multiprocessing
-    print("Finding variants...")
+    print("Finding variants in each chunk...")
     pool = multiprocessing.Pool(processes=chunk_n)
     results = []
+    
+    i = 1
     for chunk in chunks:
+        print("Processing rows in chunk %d:" %(i))
         result = pool.apply_async(process_chunk, args=(chunk, basef))
         chunk_d = result.get()
         results.append(chunk_d)
+        i += 1
+    
+    print("All variants found!")
 
     # Flatten the list of results
     flat_out_data = [item for sublist in results for item in sublist]
 
     # Print to output file 
-    print("Writing variants to output file...")
-    with open(output_vcf, "w") as f:
+    print("Writing variants to %s..." %(output_vcfss))
+    with open(output_vcfss, "w") as f:
         f.write("CHROM\tPOS\tREF\tALT\tQUAL\n")
         for entry in flat_out_data:
             if entry["REF"] != entry.get("ALT", "") and entry.get("ALT", "") != "":
