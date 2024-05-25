@@ -84,7 +84,7 @@ if __name__ == '__main__':
     parser.add_argument('--min-avg-qual', type = int, default = 15, help = 'Min average base quality at a position; default: 15')
     parser.add_argument('--min-var-freq', type = float, default = 0.01, help = 'Min variant allele freq threshold; default: 0.02')
     parser.add_argument('--min-freq-for-hom', type = float, default = 0.75, help = 'Minimum frequency to call homozygote; default: 0.75')
-    parser.add_argument('--p-value', type = float, default = 0.01, help = 'P-value threshold for calling variants; default: 0.01')
+    parser.add_argument('--min-threshold', type = float, default = 0, help = 'Minimum percent threshold for calling variants; default: 0')
     args = parser.parse_args()
     args_dict = vars(args)
     
@@ -96,7 +96,7 @@ if __name__ == '__main__':
     min_avg_qual = args_dict["min_avg_qual"]
     min_var_freq = args_dict["min_var_freq"]
     min_freq_for_hom = args_dict["min_freq_for_hom"]
-    p_val = args_dict["p_value"]
+    min_thres = args_dict["min_threshold"]
     output_vcfss = args_dict["output_vcfss"]
     
     #Read mpileup file
