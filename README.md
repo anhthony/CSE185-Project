@@ -23,7 +23,7 @@ pip install -r requirements.txt
 `VarDetect` requires two inputs, the `.mpileup` file and the reference genome of the data in the `.mpileup` file. 
 ## Mpileup File Generation
 
-****THIS STEP IS OPTIONAL**
+****THIS STEP IS OPTIONAL****
 
 Provided with VarDetect is a bash script named `makePileUp.sh` to help convert `.sam`/`.cram` files into a `.mpileup` file. When running it for the first time, run `chmod +x makePileUp.sh` to make it an executable. To run the script, `samtools` is required, installation instructions can be found [here](https://www.htslib.org/download/).
 
@@ -83,3 +83,11 @@ The vcfss output file is a tab delimited text file that stores the gene sequence
 ```
 Chromosome    Position    Ref Base    Alternative Base    Quality Score
 ```
+
+# Example Usage 
+
+We have provided a sample dataset at [testData/NA18555.mpileup]. Note that hg38.fa, the reference genome fasta, is not provided. You should change the path below to match where you have saved the reference genome locally. Here we use hg38, which can be found on datahub at [/home/your_user/public/genomes/hg38.fa]. We can then perform variant calling in the following manner:
+```
+python varDetect.py -m /testData/NA18555.mpileup -r /data/hg38.fa -o NA18555.vcfss
+```
+We expect one output file named NA18555.vcfss. 
