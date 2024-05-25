@@ -40,7 +40,7 @@ Arguments:\
 The reference genome file can be obtained online by referring to metadata about the `.sam`/`.cram`/`.mpileup` file. Ensure that you select the correct reference genome for the data that you are studying. 
 # Usage
 ```
-python varDetect.py --ref-genome [.fa ref-genome file] --mpileup-file [.mpileup file] --output-vcf [.vcf file] [OPTIONS]
+python varDetect.py --ref-genome [.fa ref-genome file] --mpileup-file [.mpileup file] --output-vcfss [.vcfss file] [OPTIONS]
 ```
 
 # Usage Options
@@ -48,7 +48,7 @@ python varDetect.py --ref-genome [.fa ref-genome file] --mpileup-file [.mpileup 
     
 `-r`/`--ref-genome` `[.fa file]`: specify a FASTA-formatted reference genome file. More info here [here](https://zhanggroup.org/FASTA/#:~:text=FASTA%20format%20is%20a%20text,by%20lines%20of%20sequence%20data.).   
 `-m`/ `--mpileup-file` `[.mpileup file]`: a `.mpileup` file that contains pileups of reads at a single genomic position. More info [here](https://www.htslib.org/doc/samtools-mpileup.html).  
-`-o`/`--output-vcf` `[name_here.vcf]`: a `.vcf` file to write all variants to. More info [here](https://samtools.github.io/hts-specs/VCFv4.2.pdf).
+`-o`/`--output-vcfss` `[name_here.vcfss]`: a `.vcfss` file to write all variants to. More info [here](https://samtools.github.io/hts-specs/VCFv4.2.pdf).
 
 ## Optional Arguments
 There are also many optional arguments to provide additional specifications towards variant calling:  

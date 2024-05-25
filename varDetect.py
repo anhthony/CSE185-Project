@@ -78,7 +78,7 @@ if __name__ == '__main__':
 
     parser.add_argument('--ref-genome', '-r', required=True, type = str, metavar="REF.fa", help = 'Reference genome')
     parser.add_argument('--mpileup-file', '-m', required=True,type = str, metavar="NAME.mpileup", help = 'The mpileup file to run variant detection on.')
-    parser.add_argument('--output-vcf', '-o', required=True, type = str, metavar="NAME.vcf", help = 'Output file in VCF format; provide [filename].vcf')
+    parser.add_argument('--output-vcfss', '-o', required=True, type = str, metavar="NAME.vcfss", help = 'Output file in VCFss (VCF subset) format; provide [filename].vcfss')
     parser.add_argument('--min-coverage', type = int, default = 8, metavar="INT", help = 'Minimum coverage at a position to make a variant call; default: 8')
     parser.add_argument('--min-reads', type = int, default = 2, help = 'Min supporting reads at a position; default: 2')
     parser.add_argument('--min-avg-qual', type = int, default = 15, help = 'Min average base quality at a position; default: 15')
@@ -97,7 +97,7 @@ if __name__ == '__main__':
     min_var_freq = args_dict["min_var_freq"]
     min_freq_for_hom = args_dict["min_freq_for_hom"]
     p_val = args_dict["p_value"]
-    output_vcf = args_dict["output_vcf"]
+    output_vcfss = args_dict["output_vcfss"]
     
     #Read mpileup file
     print("Reading in %s..." %(os.path.basename(pile_up)))
@@ -137,8 +137,8 @@ if __name__ == '__main__':
     flat_out_data = [item for sublist in results for item in sublist]
 
     # Print to output file 
-    print("Writing variants to %s..." %(output_vcf))
-    with open(output_vcf, "w") as f:
+    print("Writing variants to %s..." %(output_vcfss))
+    with open(output_vcfss, "w") as f:
         f.write("CHROM\tPOS\tREF\tALT\tQUAL\n")
         for entry in flat_out_data:
             if entry["REF"] != entry.get("ALT", "") and entry.get("ALT", "") != "":
