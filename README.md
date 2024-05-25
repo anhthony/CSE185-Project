@@ -86,7 +86,7 @@ Chromosome    Position    Ref Base    Alternative Base    Quality Score
 
 # Example Usage 
 
-We have provided a sample dataset at [testData/NA18555.mpileup]. Note that hg38.fa, the reference genome fasta, is not provided. You should change the path below to match where you have saved the reference genome locally. Here we use hg38, which can be found on datahub at [/home/your_user/public/genomes/hg38.fa]. We can then perform variant calling in the following manner:
+We have provided a sample dataset at `testData/NA18555.mpileup`. Note that hg38.fa, the reference genome fasta, is not provided. You should change the path below to match where you have saved the reference genome locally. Here we use hg38, which can be found on datahub at `/home/your_user/public/genomes/hg38.fa`. We can then perform variant calling in the following manner:
 ```
 python varDetect.py -m /testData/NA18555.mpileup -r /data/hg38.fa -o NA18555.vcfss
 ```
