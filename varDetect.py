@@ -10,11 +10,11 @@ from functools import partial
 # TODO: tqdm prog bars(one for overall, one for curr file), call for multiple input files(process one by one, don't need to parallel), validation?
 
 # Main analysis function for calling variants
-def var_call(crchrom, crpos, refb, readc, bpile, crqual, refbf):
+def var_call(crchrom, crpos, refb, readc, bpile, crqual, refbf, mffh, mt):
     refb = refb.upper()
     mostsig = 1
     samplef = {"A": 0, "C": 0, "G": 0, "T": 0}
-    tba = {"CHROM": crchrom, "POS": crpos, "REF": refb}
+    tba = {"CHROM": crchrom, "POS": crpos, "REF": refb, "GT": "0:1"} # Note that the default here is heterozygous, as we check for homozygous and if the sample allele matches the base, we don't write the variant to output 
 
     ubpile = bpile.upper()  
     i = 0 
@@ -35,7 +35,7 @@ def var_call(crchrom, crpos, refb, readc, bpile, crqual, refbf):
     # Determine and report the most likely alternate allele 
     for key, value in samplef.items():
         samplef[key] = value / readc
-        if value > refbf[key] and value - refbf[key] > mostsig:
+        if (value - mt) > refbf[key] and value - refbf[key] > mostsig:
             mostsig = value - refbf[key]
             tba["ALT"] = key 
 
@@ -45,10 +45,14 @@ def var_call(crchrom, crpos, refb, readc, bpile, crqual, refbf):
         tba["QUAL"] += (ord(q)-33)
     tba["QUAL"] /= readc
 
+    # Check if homozygous 
+    if "ALT" in tba and samplef.get(tba["ALT"], 0) >= mffh:
+        tba["GT"] = "1:1"
+
     return tba
 
 # Function to process each chunk 
-def process_chunk(chunk, refbf):
+def process_chunk(chunk, refbf, mffh, mt):
     out_data = []
     for line in chunk:
         rdata = line.split("\t")
@@ -64,7 +68,7 @@ def process_chunk(chunk, refbf):
             continue
             
         # Perform variant calling for the row and append it to 
-        tba = var_call(cr_chrom, cr_pos, cr_ref, cr_reads, cr_bases, cr_qual, refbf)
+        tba = var_call(cr_chrom, cr_pos, cr_ref, cr_reads, cr_bases, cr_qual, refbf, mffh, mt)
         out_data.append(tba)
     return out_data
 
@@ -85,7 +89,7 @@ if __name__ == '__main__':
     parser.add_argument('--min-threshold', type = float, default = 0, help = 'Minimum percent threshold for calling variants; default: 0')
     args = parser.parse_args()
     args_dict = vars(args)
-    
+
     # Retrieve command args
     pile_up = args_dict["mpileup_file"]
     ref_genome = args_dict["ref_genome"]
@@ -117,23 +121,23 @@ if __name__ == '__main__':
         print(f"The following file could not be found: {pcheck}")
         sys.exit(1)
 
-    for inp in pile_up: 
+    # Get the base frequencies from the genome of interest 
+    print("Getting nucleotide frequencies from reference genome...")
+    if not os.path.exists(ref_genome):
+        print("Reference genome file could not be found")
+        sys.exit(1)
 
+    refg = DNA.read(ref_genome, lowercase=True)
+    refgbf = refg.frequencies()
+    totalb = sum(refgbf.values())
+    basef = {base: (count / totalb) for base, count in refgbf.items()}
+    
+    # Loop through all of the input files 
+    for inp in pile_up: 
         # Read mpileup file
         print("Reading in %s..." %(os.path.basename(inp)))
         with open(inp) as f:
             pileup_data = f.readlines()
-
-        # Get the base frequencies from the genome of interest 
-        print("Getting nucleotide frequencies from reference genome...")
-        if not os.path.exists(ref_genome):
-            print("Reference genome file could not be found")
-            sys.exit(1)
-
-        refg = DNA.read(ref_genome, lowercase=True)
-        refgbf = refg.frequencies()
-        totalb = sum(refgbf.values())
-        basef = {base: (count / totalb) for base, count in refgbf.items()}
     
         # Split pileup file into chunks
         print("Chunking pileup...")
@@ -148,18 +152,8 @@ if __name__ == '__main__':
         # Perform variant calling utilizing multiprocessing
         print("Finding variants in each chunk...")
         
-        '''
-        pool = multiprocessing.Pool(processes=chunk_n)
-        results = []
-    
-        for chunk in tqdm(chunks):
-            result = pool.apply_async(process_chunk, args=(chunk, basef))
-            chunk_d = result.get()
-            results.append(chunk_d)
-        '''
-
         with multiprocessing.Pool(processes=multiprocessing.cpu_count()) as pool:
-            partialpc = partial(process_chunk, refbf=basef)
+            partialpc = partial(process_chunk, refbf=basef, mffh=min_freq_for_hom, mt=min_thres)
             results = list(tqdm(pool.imap(partialpc, chunks), total=len(chunks)))
 
         print("All variants found!")
@@ -171,7 +165,7 @@ if __name__ == '__main__':
         outfname = output_vcfss + "_" + os.path.splitext(os.path.basename(inp))[0] + ".VCFss"
         print("Writing variants to %s..." %(outfname))
         with open(outfname, "w") as f:
-            f.write("CHROM\tPOS\tREF\tALT\tQUAL\n")
+            f.write("CHROM\tPOS\tREF\tALT\tQUAL\tGT\n")
             for entry in flat_out_data:
                 if entry["REF"] != entry.get("ALT", "") and entry.get("ALT", "") != "":
-                    f.write(f"{entry['CHROM']}\t{entry['POS']}\t{entry['REF']}\t{entry.get('ALT', '')}\t{entry['QUAL']}\n")
+                    f.write(f"{entry['CHROM']}\t{entry['POS']}\t{entry['REF']}\t{entry.get('ALT', '')}\t{entry['QUAL']}\t{entry['GT']}\n")
