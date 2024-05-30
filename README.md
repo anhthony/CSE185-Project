@@ -86,11 +86,19 @@ Chromosome    Position    Ref Base    Alternative Base    Quality Score
 
 # Example Usage 
 
-We have provided 2 sample datasets in`testData`. Dataset `NA18555.mpileup` is pulled from [here](https://www.internationalgenome.org/data-portal/sample/NA18555) (alignment data type under 1000 Genomes 30x on GRCh38) and contains the region chr10:10000000-10200000 (200,000 sequences). Dataset `HG00145.mpileup` is pulled from [here](https://www.internationalgenome.org/data-portal/sample/HG00145) (alignment data type under 1000 Genomes 30x on GRCh38) and contains the region chr10:9000000-10000000 (1,000,000 sequences). Note that hg38.fa, the reference genome fasta file for both datasets, is not provided. You should change the path below to match where you have saved the reference genome locally. Here we use hg38, which can be found on datahub at `/home/your_user/public/genomes/hg38.fa`. We can then perform variant calling in the following manner:
+We have provided 2 sample datasets in`testData`. Dataset `NA18555.mpileup` is pulled from [here](https://www.internationalgenome.org/data-portal/sample/NA18555) (alignment data type under 1000 Genomes 30x on GRCh38) and contains the region chr10:10000000-10200000 (200,000 sequences). Dataset `HG00145.mpileup` is pulled from [here](https://www.internationalgenome.org/data-portal/sample/HG00145) (alignment data type under 1000 Genomes 30x on GRCh38) and contains the region chr10:9000000-10000000 (1,000,000 sequences). Note that hg38.fa, the reference genome fasta file for both datasets, is not provided. Here we use hg38, which can be found on datahub at `/home/your_user/public/genomes/hg38.fa`. You should change the path below to match where you have saved the reference genome locally. We can then perform variant calling one one dataset in the following manner:
 ```
-python varDetect.py -m /testData/NA18555.mpileup -r /data/hg38.fa -o NA18555.vcfss
+python varDetect.py -r /data/hg38.fa -o NA18555.VCFss -m /testData/NA18555.mpileup  -o testrun
 ```
-We expect one output file named `NA18555.vcfss` from running the above command. 
+We expect one output file named `testrun_NA18555.VCFss` from running the above command. 
+
+Variant calling can be performed on multiple datasets in the following manner:
+
+```
+python varDetect.py -r /data/hg38.fa -o NA18555.VCFss -m /testData/NA18555.mpileup /testData/HG00145.mpileup -o testrun
+```
+
+We expect three output files from running the above command: 'testrun_NA18555.VCFss', 'testrun_HG00145.VCFss', 'testrun_shared.VCFss', where 'testrun_shared.VCFss' contains variants shared across input datasets. 
 
 If you want to try generating the `.mpileup` file using the bash script, use the `ftp` link found when selecting "Alignment" and "1000 Genomes 30x on GRCh38" [here](https://www.internationalgenome.org/data-portal/sample/NA18555). Copy the ftp link and you can run it as follow:
 `./makePileUp.sh ftp://ftp.sra.ebi.ac.uk/vol1/run/ERR324/ERR3240150/HG00145.final.cram /data/hg38.fa chr10:10000000-10200000`
