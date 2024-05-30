@@ -14,9 +14,9 @@
     mffh - minimum variant allele frequency to call homozygous non-ref
     mt - minimum threshold to call variant
 """
-def var_call(crchrom, crpos, refb, readc, bpile, crqual, refbf, mr, mvf, mffh, mt):
+def var_call(crchrom, crpos, refb, readc, bpile, crqual, refbf, maq, mr, mvf, mffh, mt):
     refb = refb.upper()
-    mostsig = 1
+    mostsig = 0 #Difference in frequencies between observed bases and reference base
     samplef = {"A": 0, "C": 0, "G": 0, "T": 0} #Count of bases in reads
     tba = {"CHROM": crchrom, "POS": crpos, "REF": refb, "GT": "0:1"} # Note that the default here is heterozygous, as we check for homozygous and if the sample allele matches the base, we don't write the variant to output 
 
@@ -39,6 +39,9 @@ def var_call(crchrom, crpos, refb, readc, bpile, crqual, refbf, mr, mvf, mffh, m
             i +=1 
             continue
         i += 1 #Next read
+        
+    #TODO: Add in processing based on quality score using above for-loop    
+        
     # Determine and report the most likely alternate allele 
     for key, value in samplef.items():
         reads_base_freq = value / readc
@@ -89,15 +92,8 @@ def process_chunk(chunk, refbf, mc, mr, mvf, maq, mffh, mt):
         if cr_reads == 0 or cr_reads < mc:
             continue
         
-        #Skip row if average quality score is lesser than minimum avg. score
-        sum_qual = 0
-        for score in cr_qual:
-            sum_qual += (ord(score)-33)
-        if (sum_qual/len(cr_qual) < maq):
-            continue
-        
         # Perform variant calling for the row and append it to 
-        tba = var_call(cr_chrom, cr_pos, cr_ref, cr_reads, cr_bases, cr_qual, refbf, mr, mvf, mffh, mt)
+        tba = var_call(cr_chrom, cr_pos, cr_ref, cr_reads, cr_bases, cr_qual, refbf, maq, mr, mvf, mffh, mt)
         out_data.append(tba)
     return out_data
 
