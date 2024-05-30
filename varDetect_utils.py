@@ -39,13 +39,12 @@ def var_call(crchrom, crpos, refb, readc, bpile, crqual, refbf, mr, mvf, mffh, m
             i +=1 
             continue
         i += 1 #Next read
-        
     # Determine and report the most likely alternate allele 
     for key, value in samplef.items():
         reads_base_freq = value / readc
         samplef[key] = reads_base_freq #Frequency of variant in all reads at the position
         #Checking difference between count of each base and mt(?) and making sure there're enough supporting reads and high enough variant allele freq.
-        if (value - mt) > refbf[key] and value - refbf[key] > mostsig and value >= mr and reads_base_freq >= mvf:
+        if (reads_base_freq - mt) > refbf[key] and reads_base_freq - refbf[key] > mostsig and value >= mr and reads_base_freq >= mvf:
             mostsig = value - refbf[key]
             tba["ALT"] = key 
 
