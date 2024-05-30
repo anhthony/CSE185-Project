@@ -60,3 +60,24 @@ def process_chunk(chunk, refbf, mffh, mt):
         tba = var_call(cr_chrom, cr_pos, cr_ref, cr_reads, cr_bases, cr_qual, refbf, mffh, mt)
         out_data.append(tba)
     return out_data
+
+# Function to compile variants that are shared across all outputs 
+def shared_vars(fpaths, prefix):
+    def read_file(fpaths):
+        with open(fpaths, 'r') as f:
+            return {line.split('\t', 1)[0]: line.strip() for line in f}
+
+    def write_file(fpaths, data):
+        with open(fpaths, 'w') as f:
+            for row in data:
+                f.write(row + '\n')
+
+    fin = [read_file(fpaths) for fpaths in fpaths]
+
+    sk = set(fin[0].keys())
+    for data in fin[1:]:
+        sk.intersection_update(data.keys())
+
+    sr = [fin[0][key] for key in sk]
+
+    write_file(prefix+"_shared.VCFss", sr)

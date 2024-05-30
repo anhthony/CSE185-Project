@@ -67,6 +67,7 @@ if __name__ == '__main__':
     totalb = sum(refgbf.values())
     basef = {base: (count / totalb) for base, count in refgbf.items()}
     
+    outfs = []
     # Loop through all of the input files 
     for inp in pile_up: 
         # Read mpileup file
@@ -104,3 +105,8 @@ if __name__ == '__main__':
             for entry in flat_out_data:
                 if entry["REF"] != entry.get("ALT", "") and entry.get("ALT", "") != "":
                     f.write(f"{entry['CHROM']}\t{entry['POS']}\t{entry['REF']}\t{entry.get('ALT', '')}\t{entry['QUAL']}\t{entry['GT']}\n")
+        outfs.append(outfname)
+    
+    # Find common variants across output files if applicable 
+    if len(outfs) > 1:
+        shared_vars(outfs, output_vcfss)
