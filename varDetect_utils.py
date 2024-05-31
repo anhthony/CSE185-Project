@@ -18,11 +18,11 @@ from collections import defaultdict
     mffh - minimum variant allele frequency to call homozygous non-ref
     mt - minimum threshold to call variant
 """
-def var_call(crchrom, crpos, refb, readc, bpile, crqual, refbf, maq, mr, mvf, mffh, mt):
+def var_call(crchrom, crpos, refb, readc, bpile, crqual, refbf, maq, mr, mvf, mffh, mdt):
     refb = refb.upper()
     mostsig = 0 #Difference in frequencies between observed bases and reference base
     samplef = {"A": 0, "C": 0, "G": 0, "T": 0} #Count of bases in reads
-    tba = {"CHROM": crchrom, "POS": crpos, "REF": refb, "GT": "0:1"} # Note that the default here is heterozygous, as we check for homozygous and if the sample allele matches the base, we don't write the variant to output 
+    tba = {"CHROM": crchrom, "POS": crpos, "REF": refb, "GT": "0/1"} # Note that the default here is heterozygous, as we check for homozygous and if the sample allele matches the base, we don't write the variant to output 
 
     ubpile = bpile.upper()  #Make info about reads all uppercase
     i = 0 
@@ -51,7 +51,7 @@ def var_call(crchrom, crpos, refb, readc, bpile, crqual, refbf, maq, mr, mvf, mf
         reads_base_freq = value / readc
         samplef[key] = reads_base_freq #Frequency of variant in all reads at the position
         #Checking difference between count of each base and mt(?) and making sure there're enough supporting reads and high enough variant allele freq.
-        if (reads_base_freq - mt) > refbf[key] and reads_base_freq - refbf[key] > mostsig and value >= mr and reads_base_freq >= mvf:
+        if (reads_base_freq - mdt) > refbf[key] and reads_base_freq - refbf[key] > mostsig and value >= mr and reads_base_freq >= mvf:
             mostsig = reads_base_freq - refbf[key]
             tba["ALT"] = key 
 
@@ -64,7 +64,7 @@ def var_call(crchrom, crpos, refb, readc, bpile, crqual, refbf, maq, mr, mvf, mf
 
     # Check if homozygous 
     if "ALT" in tba and samplef.get(tba["ALT"], 0) >= mffh:
-        tba["GT"] = "1:1"
+        tba["GT"] = "1/1"
 
     return tba
 
@@ -81,7 +81,7 @@ def var_call(crchrom, crpos, refb, readc, bpile, crqual, refbf, maq, mr, mvf, mf
         mffh - minimum frequency to consider a variant non-reference homozygous
         mt - minimum threshold to call a variant
     """
-def process_chunk(chunk, refbf, mc, mr, mvf, maq, mffh, mt):
+def process_chunk(chunk, refbf, mc, mr, mvf, maq, mffh, mdt):
     out_data = []
     for line in chunk: 
         rdata = line.split("\t")
@@ -97,7 +97,7 @@ def process_chunk(chunk, refbf, mc, mr, mvf, maq, mffh, mt):
             continue
         
         # Perform variant calling for the row and append it to 
-        tba = var_call(cr_chrom, cr_pos, cr_ref, cr_reads, cr_bases, cr_qual, refbf, maq, mr, mvf, mffh, mt)
+        tba = var_call(cr_chrom, cr_pos, cr_ref, cr_reads, cr_bases, cr_qual, refbf, maq, mr, mvf, mffh, mdt)
         out_data.append(tba)
     return out_data
 

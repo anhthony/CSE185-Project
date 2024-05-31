@@ -21,7 +21,7 @@ if __name__ == '__main__':
     parser.add_argument('--min-avg-qual', type = int, default = 15, help = 'Min average base quality at a position; default: 15')
     parser.add_argument('--min-var-freq', type = float, default = 0.01, help = 'Min variant allele freq threshold; default: 0.01')
     parser.add_argument('--min-freq-for-hom', type = float, default = 0.75, help = 'Minimum frequency to call homozygote; default: 0.75')
-    parser.add_argument('--min-threshold', type = float, default = 0, help = 'Minimum percent threshold for calling variants; default: 0')
+    parser.add_argument('--min-diff-threshold', type = float, default = 0.05, help = 'Minimum difference between variant allele and reference allele frequencies for calling variants; default: 0.05')
     args = parser.parse_args()
     args_dict = vars(args)
 
@@ -33,11 +33,11 @@ if __name__ == '__main__':
     min_avg_qual = args_dict["min_avg_qual"]
     min_var_freq = args_dict["min_var_freq"]
     min_freq_for_hom = args_dict["min_freq_for_hom"]
-    min_thres = args_dict["min_threshold"]
+    min_diff_thres = args_dict["min_diff_threshold"]
     output_vcfss = args_dict["output_vcfss"]
     print("Mpileup file(s): ", pile_ups)
-    print("Reference genome: %s\nMinimum coverage: %s\nMinimum supporting reads: %s\nMinimum average quality score: %s\nMinimum variant frequency: %s\nMinimum frequency for non-reference homozygous: %s\nMinimum threshold: %s" 
-          % (ref_genome,min_cov,min_reads, min_avg_qual, min_var_freq, min_freq_for_hom, min_thres))
+    print("Reference genome: %s\nMinimum coverage: %s\nMinimum supporting reads: %s\nMinimum average quality score: %s\nMinimum variant frequency: %s\nMinimum frequency for non-reference homozygous: %s\nMinimum difference threshold: %s" 
+          % (ref_genome,min_cov,min_reads, min_avg_qual, min_var_freq, min_freq_for_hom, min_diff_thres))
     # Sanity checks for passed arguments, if does not pass, set to default
     if min_cov < 0:
         print("Minimum coverage cannot be negative, defaulting to 8")
@@ -54,9 +54,9 @@ if __name__ == '__main__':
     if min_freq_for_hom < 0:
         print("Minimum frequency to call homozygote cannot be negative, defaulting to 0.75")
         min_freq_for_hom = 0.75
-    if min_thres < 0:
+    if min_diff_thres < 0:
         print("Minimum threshold for calling variants cannot be negative, defaulting to 0")
-        min_thres = 0
+        min_diff_thres = 0.05
 
     # Check if all specified files exist, then loop through and run variant calling on each individually 
     pcheck = [file for file in pile_ups if not os.path.exists(file)]
@@ -101,7 +101,7 @@ if __name__ == '__main__':
         
         with multiprocessing.Pool(processes=multiprocessing.cpu_count()) as pool:
             partialpc = partial(process_chunk, refbf=basef, mc = min_cov, mr = min_reads, mvf = min_var_freq,
-                                maq = min_avg_qual, mffh=min_freq_for_hom, mt=min_thres)
+                                maq = min_avg_qual, mffh=min_freq_for_hom, mdt=min_diff_thres)
             results = list(tqdm(pool.imap(partialpc, chunks), total=len(chunks)))
 
         print("All variants found!")
