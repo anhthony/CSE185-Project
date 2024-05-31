@@ -47,8 +47,8 @@ python varDetect.py --ref-genome [.fa ref-genome file] --mpileup-file [.mpileup 
 ## Required Arguments 
     
 `-r`/`--ref-genome` `[.fa file]`: specify a FASTA-formatted reference genome file. More info here [here](https://zhanggroup.org/FASTA/#:~:text=FASTA%20format%20is%20a%20text,by%20lines%20of%20sequence%20data.).   
-`-m`/ `--mpileup-file` `[.mpileup file]`: a `.mpileup` file that contains pileups of reads at a single genomic position. More info [here](https://www.htslib.org/doc/samtools-mpileup.html).  
-`-o`/`--output-vcfss` `[name_here.vcfss]`: a `.vcfss` file to write all variants to.
+`-m`/ `--mpileup-file` `[.mpileup file 1] [.mpileup file 2]...`: `.mpileup` file(s) that contains pileups of reads at a single genomic position. More info [here](https://www.htslib.org/doc/samtools-mpileup.html). Each `.mpileup` file should contain information for only ONE dataset. Multiple `.mpileup` files can be given, but at least one is required. 
+`-o`/`--output-vcfss` `[prefix]`: prefix for output `.VCFss` file. All variants will be written to `[prefix]_[filename].VCFss`. If multiplle `.mpileup` files are given, `VarDetect` will also output a `[prefix]_shared.VCFss` file that contains variants found in all given `.mpileup` files.
 
 ## Optional Arguments
 There are also many optional arguments to provide additional specifications towards variant calling:  
@@ -58,7 +58,7 @@ There are also many optional arguments to provide additional specifications towa
 ```--min-avg-qual```: minimum base quality ([Phred score](https://www.drive5.com/usearch/manual/quality_score.html)) of a read to count read (default: 15)  
 ```--min-freq-for-hom```: minimum frequency to call variant a homozygote (default: 0.75)   
 ```--min-var-freq```: specifiy the minimum variant allele frequency threshold (default: 0.01)   
-```--min-threshold```:  minimum percent threshold for calling variants (default: 0)
+```--min-difference-threshold```:  minimum difference threshold between variant allele and reference allele for calling variants (default: 0) (i.e. if the difference threshold is 0.05, then if a reference allele has frequency 0.25, the variant allele frequency must be at least 0.30 to be called a variant [difference of at least 0.05]). The difference is calculated as `[var. allele freq.] - [ref. alelle freq.]`.
 
 # File Formats
 ```ref_genome.fa```   
@@ -77,12 +77,13 @@ The mpileup file is what ```VarDetect``` takes in to run variant detection on. I
 Chromosome    Position    Ref Base    Coverage    Read Bases    Quality Score
 ```
     
-```output.vcfss```   
+```output.VCFss```   
     
 The vcfss output file is a tab delimited text file that stores the gene sequence variants identified from  ```VarDetect```. It contains the following data:
 ```
 Chromosome    Position    Ref Base    Alternative Base    Quality Score
 ```
+**Quality Score is the average quality score across all reads at that position.
 
 # Example Usage 
 
