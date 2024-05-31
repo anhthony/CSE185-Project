@@ -101,19 +101,27 @@ def process_chunk(chunk, refbf, mc, mr, mvf, maq, mffh, mt):
 def shared_vars(fpaths, prefix):
     def read_file(fpaths):
         with open(fpaths, 'r') as f:
-            return {line.split('\t', 1)[0]: line.strip() for line in f}
-
-    def write_file(fpaths, data):
+            lines = f.readlines()
+        header = lines[0].strip()
+        data = {line.split('\t', 1)[0]: line.strip() for line in lines[1:]}
+        return header, data
+    
+    def write_file(fpaths, header, data):
         with open(fpaths, 'w') as f:
+            f.write(header + '\n')
             for row in data:
                 f.write(row + '\n')
 
-    fin = [read_file(fpaths) for fpaths in fpaths]
-
-    sk = set(fin[0].keys())
-    for data in fin[1:]:
+    headers, fdata = zip(*(read_file(fpath) for fpath in fpaths))
+    
+    sk = set(fdata[0].keys())
+    for data in fdata[1:]:
         sk.intersection_update(data.keys())
 
-    sr = [fin[0][key] for key in sk]
+    shared = []
+    for key in sk:
+        reference_row = fdata[0][key]
+        if all(fdata[i][key] == reference_row for i in range(1, len(fdata))):
+            shared.append(reference_row)
 
-    write_file(prefix+"_shared.VCFss", sr)
+    write_file(prefix+"_shared.VCFss", headers[0], shared)
