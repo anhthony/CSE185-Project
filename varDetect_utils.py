@@ -1,3 +1,7 @@
+# imports for util functions
+import csv
+from collections import defaultdict
+
 # Main analysis function for calling variants
 """ Function to check for variant at a position
     
@@ -99,29 +103,31 @@ def process_chunk(chunk, refbf, mc, mr, mvf, maq, mffh, mt):
 
 # Function to compile variants that are shared across all outputs 
 def shared_vars(fpaths, prefix):
-    def read_file(fpaths):
-        with open(fpaths, 'r') as f:
-            lines = f.readlines()
-        header = lines[0].strip()
-        data = {line.split('\t', 1)[0]: line.strip() for line in lines[1:]}
-        return header, data
+    data = []
+    header = None
+    fcount = len(fpaths)
     
-    def write_file(fpaths, header, data):
-        with open(fpaths, 'w') as f:
-            f.write(header + '\n')
-            for row in data:
-                f.write(row + '\n')
+    data_out = defaultdict(lambda: {'count': 0, 'col5': [], 'col6': []})
 
-    headers, fdata = zip(*(read_file(fpath) for fpath in fpaths))
+
+    for file in fpaths:
+        with open(file, 'r', newline='') as f:
+            reader = csv.reader(f, delimiter='\t')
+            if header is None:
+                header = next(reader)  
+            else:
+                next(reader)  
+            for row in reader:
+                key = tuple(row[:4])
+                data_out[key]['count'] += 1
+                data_out[key]['col5'].append(row[4])
+                data_out[key]['col6'].append(row[5])
     
-    sk = set(fdata[0].keys())
-    for data in fdata[1:]:
-        sk.intersection_update(data.keys())
-
-    shared = []
-    for key in sk:
-        reference_row = fdata[0][key]
-        if all(fdata[i][key] == reference_row for i in range(1, len(fdata))):
-            shared.append(reference_row)
-
-    write_file(prefix+"_shared.VCFss", headers[0], shared)
+    with open(prefix+"_shared.VCFss", 'w', newline='') as f:
+        writer = csv.writer(f, delimiter='\t')
+        writer.writerow(header)
+        for key, value in data_out.items():
+            if value['count'] == fcount:
+                c5comb = ';'.join(value['col5'])
+                c6comb = ';'.join(value['col6'])
+                writer.writerow(list(key) + [c5comb, c6comb])
