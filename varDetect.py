@@ -121,4 +121,6 @@ if __name__ == '__main__':
     
     # Find common variants across output files if applicable 
     if len(outfs) > 1:
+        print("Looking for shared variants...")
         shared_vars(outfs, output_vcfss)
+        print("Writing shared variants to %s..." %(output_vcfss+"_shared.VCFss"))

@@ -81,9 +81,10 @@ Chromosome    Position    Ref Base    Coverage    Read Bases    Quality Score
     
 The vcfss output file is a tab delimited text file that stores the gene sequence variants identified from  ```VarDetect```. It contains the following data:
 ```
-Chromosome    Position    Ref Base    Alternative Base    Quality Score
+Chromosome    Position    Ref Base    Alternative Base    Quality Score    Genotype
 ```
-**Quality Score is the average quality score across all reads at that position.
+*Quality Score is the average quality score across all reads at that position.
+**In the shared variants vcfss, the quality score and genotype for all inputs are reported and seperated by a semicolon(;)
 
 # Example Usage 
 
