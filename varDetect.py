@@ -110,7 +110,7 @@ if __name__ == '__main__':
         flat_out_data = [item for sublist in results for item in sublist]
 
         # Print to output file 
-        outfname = output_vcfss + "_" + os.path.splitext(os.path.basename(inp))[0] + ".VCFss"
+        outfname = output_vcfss + "_" + os.path.splitext(os.path.basename(inp))[0] + ".vcfss"
         print("Writing variants to %s..." %(outfname))
         with open(outfname, "w") as f:
             f.write("CHROM\tPOS\tREF\tALT\tQUAL\tGT\n")
@@ -126,4 +126,4 @@ if __name__ == '__main__':
     if len(outfs) > 1:
         print("Looking for shared variants...")
         shared_vars(outfs, output_vcfss)
-        print("Writing shared variants to %s..." %(output_vcfss+"_shared.VCFss"))
+        print("Writing shared variants to %s..." %(output_vcfss+"_shared.vcfss"))

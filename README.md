@@ -48,7 +48,7 @@ python varDetect.py --ref-genome [.fa ref-genome file] --mpileup-file [.mpileup 
     
 `-r`/`--ref-genome` `[.fa file]`: specify a FASTA-formatted reference genome file. More info here [here](https://zhanggroup.org/FASTA/#:~:text=FASTA%20format%20is%20a%20text,by%20lines%20of%20sequence%20data.).   
 `-m`/ `--mpileup-file` `[.mpileup file 1] [.mpileup file 2]...`: `.mpileup` file(s) that contains pileups of reads at a single genomic position. More info [here](https://www.htslib.org/doc/samtools-mpileup.html). Each `.mpileup` file should contain information for only ONE dataset. Multiple `.mpileup` files can be given, but at least one is required.   
-`-o`/`--output-vcfss` `[prefix]`: prefix for output `.VCFss` file. All variants will be written to `[prefix]_[filename].VCFss`. If multiplle `.mpileup` files are given, `VarDetect` will also output a `[prefix]_shared.VCFss` file that contains variants found in all given `.mpileup` files.
+`-o`/`--output-vcfss` `[prefix]`: prefix for output `.vcfss` file. All variants will be written to `[prefix]_[filename].vcfss`. If multiplle `.mpileup` files are given, `VarDetect` will also output a `[prefix]_shared.vcfss` file that contains variants found in all given `.mpileup` files.
 
 ## Optional Arguments
 There are also many optional arguments to provide additional specifications towards variant calling:  
@@ -77,14 +77,14 @@ The mpileup file is what ```VarDetect``` takes in to run variant detection on. I
 Chromosome    Position    Ref Base    Coverage    Read Bases    Quality Score
 ```
     
-```output.VCFss```   
+```output.vcfss```   
     
 The vcfss output file is a tab delimited text file that stores the gene sequence variants identified from  ```VarDetect```. It contains the following data:
 ```
 Chromosome    Position    Ref Base    Alternative Base    Quality Score    Genotype
 ```
 *Quality Score is the average quality score across all reads at that position.
-**In the shared variants vcfss, the quality score and genotype for all inputs are reported and seperated by a semicolon(;)
+**In the shared variants .vcfss, the quality score and genotype for all inputs are reported and seperated by a semicolon(;)
 
 # Example Usage 
 
