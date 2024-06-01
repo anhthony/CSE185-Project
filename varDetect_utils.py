@@ -13,26 +13,46 @@ from collections import defaultdict
     bpile - informatiomn about reads at this position
     crqual - quality score that corresponds to each reach
     refbf - frequencies of bases in ref. genome
+    mc - minimum read coverage to call variant
+    maq - minimum base quality to count a read 
     mr - minimum supporting reads at position to call variant
     mvf - minimum variant allele frequency to call variant
     mffh - minimum variant allele frequency to call homozygous non-ref
     mt - minimum threshold to call variant
 """
-def var_call(crchrom, crpos, refb, readc, bpile, crqual, refbf, maq, mr, mvf, mffh, mdt):
+def var_call(crchrom, crpos, refb, readc, bpile, crqual, refbf, mc, maq, mr, mvf, mffh, mdt):
     refb = refb.upper()
     mostsig = 0 #Difference in frequencies between observed bases and reference base
     samplef = {"A": 0, "C": 0, "G": 0, "T": 0} #Count of bases in reads
     tba = {"CHROM": crchrom, "POS": crpos, "REF": refb, "GT": "0/1"} # Note that the default here is heterozygous, as we check for homozygous and if the sample allele matches the base, we don't write the variant to output 
 
     ubpile = bpile.upper()  #Make info about reads all uppercase
-    i = 0 
+    i = 0 #Index of reads string (bpile)
+    j = 0 #Index of quality scores string (crqual)
+    filt_readc = readc  #Read count after filtering out bad quality reads
+    sum_qs = 0 #Sum of quality scores at a position
+    
     # Process the aligned reads(https://en.wikipedia.org/wiki/Pileup_format)
     while i < len(ubpile):
         cb = ubpile[i]
+        q = crqual[j]
+        qs = (ord(q) - 33)
+        if filt_readc < mc: #Stop variant calling if filtered read counts is lesser than minimum coverage
+            return None
         if cb == "." or cb == ",": 
-            samplef[refb] += 1 #Increment count for reference base
-        elif cb in samplef:
-            samplef[cb] += 1 #Increment count of non-reference base
+            if qs >= maq: #Check that quality score for the read pass the minimum quality score allowed
+                samplef[refb] += 1 #Increment count for reference base
+                sum_qs += qs 
+                j += 1
+            else: #Decrease read count if read does not pass quality score check
+                filt_readc -= 1
+        elif cb in samplef: 
+            if qs >= maq:
+                samplef[cb] += 1 #Increment count of non-reference base
+                sum_qs += qs
+                j += 1
+            else:
+                filt_readc -= 1
         elif cb == "+" or cb == "-": #Found indel, skip over
             i += 1 + int(ubpile[i+1]) + 1
             continue
@@ -43,8 +63,6 @@ def var_call(crchrom, crpos, refb, readc, bpile, crqual, refbf, maq, mr, mvf, mf
             i +=1 
             continue
         i += 1 #Next read
-        
-    #TODO: Add in processing based on quality score using above for-loop    
         
     # Determine and report the most likely alternate allele 
     for key, value in samplef.items():
@@ -57,10 +75,7 @@ def var_call(crchrom, crpos, refb, readc, bpile, crqual, refbf, maq, mr, mvf, mf
 
 
     # Mean phred is given as qual score 
-    tba["QUAL"] = 0
-    for q in crqual:
-        tba["QUAL"] += (ord(q)-33)
-    tba["QUAL"] /= readc
+    tba["QUAL"] = sum_qs/filt_readc
 
     # Check if homozygous 
     if "ALT" in tba and samplef.get(tba["ALT"], 0) >= mffh:
@@ -97,8 +112,9 @@ def process_chunk(chunk, refbf, mc, mr, mvf, maq, mffh, mdt):
             continue
         
         # Perform variant calling for the row and append it to 
-        tba = var_call(cr_chrom, cr_pos, cr_ref, cr_reads, cr_bases, cr_qual, refbf, maq, mr, mvf, mffh, mdt)
-        out_data.append(tba)
+        tba = var_call(cr_chrom, cr_pos, cr_ref, cr_reads, cr_bases, cr_qual, refbf, mc, maq, mr, mvf, mffh, mdt)
+        if tba != None:
+            out_data.append(tba)
     return out_data
 
 # Function to compile variants that are shared across all outputs 
