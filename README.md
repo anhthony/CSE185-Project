@@ -47,7 +47,7 @@ python varDetect.py --ref-genome [.fa ref-genome file] --mpileup-file [.mpileup 
 ## Required Arguments 
     
 `-r`/`--ref-genome` `[.fa file]`: specify a FASTA-formatted reference genome file. More info here [here](https://zhanggroup.org/FASTA/#:~:text=FASTA%20format%20is%20a%20text,by%20lines%20of%20sequence%20data.).   
-`-m`/ `--mpileup-file` `[.mpileup file 1] [.mpileup file 2]...`: `.mpileup` file(s) that contains pileups of reads at a single genomic position. More info [here](https://www.htslib.org/doc/samtools-mpileup.html). Each `.mpileup` file should contain information for only ONE dataset. Multiple `.mpileup` files can be given, but at least one is required.   
+`-m`/ `--mpileup-file` `[.mpileup file 1] [.mpileup file 2]...`: `.mpileup` file(s) that contains pileups of reads at a single genomic position. More info [here](https://www.htslib.org/doc/samtools-mpileup.html). Each `.mpileup` file should contain information for only ONE dataset. Multiple `.mpileup` files can be given, but at least one is required. 
 `-o`/`--output-vcfss` `[prefix]`: prefix for output `.vcfss` file. All variants will be written to `[prefix]_[filename].vcfss`. If multiple `.mpileup` files are given, there will be one `.vcfss` file for every input `.mpileup` file. `VarDetect` will also output a `[prefix]_shared.vcfss` file that contains variants found in all given `.mpileup` files.
 
 ## Optional Arguments
@@ -74,7 +74,7 @@ Variant calling can be performed on multiple datasets in the following manner:
 python varDetect.py -r ./data/hg38.fa -m ./testData/NA18555.mpileup ./testData/HG00145.mpileup -o testrun
 ```
 
-We expect three output files from running the above command: `testrun_NA18555.VCFss`, `testrun_HG00145.VCFss`, `testrun_shared.VCFss`, where `testrun_shared.VCFss` contains variants shared across input datasets. 
+We expect three output files from running the above command: `testrun_NA18555.vcfss`, `testrun_HG00145.vcfss`, `testrun_shared.vcfss`, where `testrun_shared.vcfss` contains variants shared across input datasets. 
 
 If you want to try generating the `.mpileup` file using the bash script, use the `ftp` link found when selecting "Alignment" and "1000 Genomes 30x on GRCh38" [here](https://www.internationalgenome.org/data-portal/sample/NA18555). Copy the ftp link and you can run it as follow (for NA18555):
 `./makePileUp.sh ftp://ftp.sra.ebi.ac.uk/vol1/run/ERR323/ERR3239361/NA18555.final.cram /data/hg38.fa chr10:10000000-10200000`
@@ -111,8 +111,8 @@ Chromosome    Position    Ref Base    Alternative Base    Quality Score    Genot
 
 
 The file format is to be a subset of the `.vcf` format. More information about `.vcf` files can be found [here](https://samtools.github.io/hts-specs/VCFv4.2.pdf).  
-*Quality Score is the average quality score across all reads at that position.  
 
+*Quality Score is the average quality score across all reads at that position.  
 **In the shared variants .vcfss, the quality score and genotype for all inputs are reported and seperated by a semicolon(;)  
 ***For "Genotype", "0/1" denotes a heterozygote, "1/1" denotes a non-reference homozygote. "0/0" denotes a reference homozygote but will never be seen since we are only reporting variants.
 
