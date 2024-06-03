@@ -26,6 +26,7 @@ From our analysis, `VarDetect` is slower than `VarScan` in every dataset that bo
 
 On average across all 6 datasets, `VarDetect` is about 2.35x slower than `VarScan`. On average across all datasets from lab (`NA12878_child, NA12891_father, NA12892_mother`), `VarDetect` is about 2.29x slower than `VarScan`. On average across all datasets of our own choosing (`NA18555, HG02603, HG000145`), `VarDetect` is about 2.41x slower than `VarScan`. Runtime for both tools were measured using datasets containing roughly 200,000 positions in chromosome 6 (lab datasets) and chromosome 10 (datasets that we chose) of the human genome and the same optional flags used for variant calling.
 
+In conclusion, `VarDetect` takes about ~2.3x more time to run than `VarScan` using the same dataset with equal size and same optional flags.
 ## 2. Accuracy Between `VarScan` And `VarDetect` With Different Datasets
 
 From our analysis, `VarDetect` was only able to find a subset of the variants that `VarScan` found (the assumed 'true' variants).
@@ -44,11 +45,15 @@ From our analysis, `VarDetect` was only able to find a subset of the variants th
 
 On average across all 6 datasets, `VarDetect` found about 31.97% of the 'true' variants. On average across all datasets from lab (`NA12878_child, NA12891_father, NA12892_mother`), `VarDetect` found about 15.59% of the 'true' variants. On average across all datasets of our own choosing (`NA18555, HG02603, HG000145`), `VarDetect` found about 48.34% of the 'true' variants. Accuracy for `VarDetect` was measured by running 200,000 positions in chromosome 6 (lab datasets) and chromosome 10 (datasets that we chose) of the human genome in each of the 6 datasets using both `VarDetect` and `VarScan`. Then, the output files of both tools were examined and analyzed for accuracy.
 
+Here, we notice that the accuracy for `VarDetect` is low for the lab datasets but is higher for the datasets that we chose. Further investigation would be needed to discover why this is the case.
+
 ## 3. Runtime of `VarDetect` and `VarScan` For Varying Input Sizes
 
 For this analysis, we used `NA18555` as the dataset and extracted incrementing sizes of data from `NA18555`. We created 20 `.mpileup` files, ranging from 100,000 bases to 2,000,000 bases, incrementing by 100,000 for each. Then, we ran both `VarScan` and `VarDetect` on each of the `.mpileup` file, recorded the runtime (user + sys), and plotted the runtimes for each input size for each tool. Positions in the `.mpileup` files were all taken from chromosome 10 of the human genome.
 
 ![runtimeGraph](runtimeByInputSize.jpg)
+
+Here, we can see that `VarDetect`'s runtime is worse than `VarScan` (also shown in the first benchmarking method). We also see that `VarDetect` and `VarScan`'s runtime scale linearly.
 
 ## Datasets that We Chose
 
