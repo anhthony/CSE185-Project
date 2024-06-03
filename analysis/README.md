@@ -53,3 +53,7 @@ Each file contains output to terminal from `runtimeBySizeVarD.sh` and `runtimeBy
 # graph.ipynb
 
 `graph.ipynb` contains code to graph the results (runtime based on size) from `runtimeBySizeVarD.sh` and `runtimeBySizeVarS.sh`.
+
+# VarScan.jar
+
+Variant-calling tool `VarScan` that we will use to benchmark against. More info [here](https://varscan.sourceforge.net/index.html).
