@@ -1,0 +1,321 @@
+(py312) (base) Anthony@Anthonys-Macbook-Pro-2 analysis % ./runtimeBySizeVarS.sh
+Runtime for mpileup file with 100000 bases
+Only SNPs will be reported
+Min coverage:   8
+Min reads2:     2
+Min var freq:   0.01
+Min avg qual:   15
+P-value thresh: 0.99
+Reading input from mpileupSizes/NA18555-100000.mpileup
+100000 bases in pileup file
+130 variant positions (105 SNP, 25 indel)
+0 were failed by the strand-filter
+105 variant positions reported (105 SNP, 0 indel)
+
+real    0m3.447s
+user    0m6.833s
+sys     0m0.239s
+Runtime for mpileup file with 1000000 bases
+Only SNPs will be reported
+Min coverage:   8
+Min reads2:     2
+Min var freq:   0.01
+Min avg qual:   15
+P-value thresh: 0.99
+Reading input from mpileupSizes/NA18555-1000000.mpileup
+999886 bases in pileup file
+1971 variant positions (1680 SNP, 291 indel)
+7 were failed by the strand-filter
+1675 variant positions reported (1675 SNP, 0 indel)
+
+real    0m30.948s
+user    0m54.081s
+sys     0m0.992s
+Runtime for mpileup file with 1100000 bases
+Only SNPs will be reported
+Min coverage:   8
+Min reads2:     2
+Min var freq:   0.01
+Min avg qual:   15
+P-value thresh: 0.99
+Reading input from mpileupSizes/NA18555-1100000.mpileup
+1099886 bases in pileup file
+2092 variant positions (1777 SNP, 315 indel)
+7 were failed by the strand-filter
+1772 variant positions reported (1772 SNP, 0 indel)
+
+real    0m29.683s
+user    0m53.070s
+sys     0m0.667s
+Runtime for mpileup file with 1200000 bases
+Only SNPs will be reported
+Min coverage:   8
+Min reads2:     2
+Min var freq:   0.01
+Min avg qual:   15
+P-value thresh: 0.99
+Reading input from mpileupSizes/NA18555-1200000.mpileup
+1199885 bases in pileup file
+2260 variant positions (1914 SNP, 346 indel)
+8 were failed by the strand-filter
+1909 variant positions reported (1909 SNP, 0 indel)
+
+real    0m30.051s
+user    0m55.726s
+sys     0m0.791s
+Runtime for mpileup file with 1300000 bases
+Only SNPs will be reported
+Min coverage:   8
+Min reads2:     2
+Min var freq:   0.01
+Min avg qual:   15
+P-value thresh: 0.99
+Reading input from mpileupSizes/NA18555-1300000.mpileup
+1299885 bases in pileup file
+2547 variant positions (2150 SNP, 397 indel)
+9 were failed by the strand-filter
+2144 variant positions reported (2144 SNP, 0 indel)
+
+real    0m29.369s
+user    0m55.937s
+sys     0m1.053s
+Runtime for mpileup file with 1400000 bases
+Only SNPs will be reported
+Min coverage:   8
+Min reads2:     2
+Min var freq:   0.01
+Min avg qual:   15
+P-value thresh: 0.99
+Reading input from mpileupSizes/NA18555-1400000.mpileup
+1399875 bases in pileup file
+2773 variant positions (2348 SNP, 425 indel)
+9 were failed by the strand-filter
+2342 variant positions reported (2342 SNP, 0 indel)
+
+real    0m35.634s
+user    1m4.661s
+sys     0m1.055s
+Runtime for mpileup file with 1500000 bases
+Only SNPs will be reported
+Min coverage:   8
+Min reads2:     2
+Min var freq:   0.01
+Min avg qual:   15
+P-value thresh: 0.99
+Reading input from mpileupSizes/NA18555-1500000.mpileup
+1499875 bases in pileup file
+2990 variant positions (2525 SNP, 465 indel)
+11 were failed by the strand-filter
+2519 variant positions reported (2519 SNP, 0 indel)
+
+real    0m46.821s
+user    1m12.050s
+sys     0m1.558s
+Runtime for mpileup file with 1600000 bases
+Only SNPs will be reported
+Min coverage:   8
+Min reads2:     2
+Min var freq:   0.01
+Min avg qual:   15
+P-value thresh: 0.99
+Reading input from mpileupSizes/NA18555-1600000.mpileup
+1599875 bases in pileup file
+3117 variant positions (2628 SNP, 489 indel)
+12 were failed by the strand-filter
+2621 variant positions reported (2621 SNP, 0 indel)
+
+real    0m40.127s
+user    1m12.692s
+sys     0m1.455s
+Runtime for mpileup file with 1700000 bases
+Only SNPs will be reported
+Min coverage:   8
+Min reads2:     2
+Min var freq:   0.01
+Min avg qual:   15
+P-value thresh: 0.99
+Reading input from mpileupSizes/NA18555-1700000.mpileup
+1699875 bases in pileup file
+3234 variant positions (2712 SNP, 522 indel)
+12 were failed by the strand-filter
+2705 variant positions reported (2705 SNP, 0 indel)
+
+real    0m48.942s
+user    1m32.160s
+sys     0m1.499s
+Runtime for mpileup file with 1800000 bases
+Only SNPs will be reported
+Min coverage:   8
+Min reads2:     2
+Min var freq:   0.01
+Min avg qual:   15
+P-value thresh: 0.99
+Reading input from mpileupSizes/NA18555-1800000.mpileup
+1799694 bases in pileup file
+3683 variant positions (3101 SNP, 582 indel)
+19 were failed by the strand-filter
+3087 variant positions reported (3087 SNP, 0 indel)
+
+real    0m47.415s
+user    1m13.747s
+sys     0m1.383s
+Runtime for mpileup file with 1900000 bases
+Only SNPs will be reported
+Min coverage:   8
+Min reads2:     2
+Min var freq:   0.01
+Min avg qual:   15
+P-value thresh: 0.99
+Reading input from mpileupSizes/NA18555-1900000.mpileup
+1899694 bases in pileup file
+4000 variant positions (3367 SNP, 633 indel)
+21 were failed by the strand-filter
+3352 variant positions reported (3352 SNP, 0 indel)
+
+real    0m42.155s
+user    1m29.534s
+sys     0m1.605s
+Runtime for mpileup file with 200000 bases
+Only SNPs will be reported
+Min coverage:   8
+Min reads2:     2
+Min var freq:   0.01
+Min avg qual:   15
+P-value thresh: 0.99
+Reading input from mpileupSizes/NA18555-200000.mpileup
+200000 bases in pileup file
+314 variant positions (261 SNP, 53 indel)
+0 were failed by the strand-filter
+261 variant positions reported (261 SNP, 0 indel)
+
+real    0m18.165s
+user    0m30.224s
+sys     0m0.710s
+Runtime for mpileup file with 2000000 bases
+Only SNPs will be reported
+Min coverage:   8
+Min reads2:     2
+Min var freq:   0.01
+Min avg qual:   15
+P-value thresh: 0.99
+Reading input from mpileupSizes/NA18555-2000000.mpileup
+1999694 bases in pileup file
+4152 variant positions (3482 SNP, 670 indel)
+21 were failed by the strand-filter
+3467 variant positions reported (3467 SNP, 0 indel)
+
+real    0m49.978s
+user    1m15.618s
+sys     0m1.321s
+Runtime for mpileup file with 300000 bases
+Only SNPs will be reported
+Min coverage:   8
+Min reads2:     2
+Min var freq:   0.01
+Min avg qual:   15
+P-value thresh: 0.99
+Reading input from mpileupSizes/NA18555-300000.mpileup
+299946 bases in pileup file
+683 variant positions (587 SNP, 96 indel)
+0 were failed by the strand-filter
+587 variant positions reported (587 SNP, 0 indel)
+
+real    0m20.642s
+user    0m37.815s
+sys     0m0.836s
+Runtime for mpileup file with 400000 bases
+Only SNPs will be reported
+Min coverage:   8
+Min reads2:     2
+Min var freq:   0.01
+Min avg qual:   15
+P-value thresh: 0.99
+Reading input from mpileupSizes/NA18555-400000.mpileup
+399946 bases in pileup file
+757 variant positions (651 SNP, 106 indel)
+0 were failed by the strand-filter
+651 variant positions reported (651 SNP, 0 indel)
+
+real    0m24.255s
+user    0m35.839s
+sys     0m0.634s
+Runtime for mpileup file with 500000 bases
+Only SNPs will be reported
+Min coverage:   8
+Min reads2:     2
+Min var freq:   0.01
+Min avg qual:   15
+P-value thresh: 0.99
+Reading input from mpileupSizes/NA18555-500000.mpileup
+499946 bases in pileup file
+900 variant positions (777 SNP, 123 indel)
+1 were failed by the strand-filter
+777 variant positions reported (777 SNP, 0 indel)
+
+real    0m24.211s
+user    0m41.296s
+sys     0m0.672s
+Runtime for mpileup file with 600000 bases
+Only SNPs will be reported
+Min coverage:   8
+Min reads2:     2
+Min var freq:   0.01
+Min avg qual:   15
+P-value thresh: 0.99
+Reading input from mpileupSizes/NA18555-600000.mpileup
+599946 bases in pileup file
+1172 variant positions (1015 SNP, 157 indel)
+1 were failed by the strand-filter
+1015 variant positions reported (1015 SNP, 0 indel)
+
+real    0m24.247s
+user    0m46.380s
+sys     0m0.767s
+Runtime for mpileup file with 700000 bases
+Only SNPs will be reported
+Min coverage:   8
+Min reads2:     2
+Min var freq:   0.01
+Min avg qual:   15
+P-value thresh: 0.99
+Reading input from mpileupSizes/NA18555-700000.mpileup
+699946 bases in pileup file
+1381 variant positions (1203 SNP, 178 indel)
+6 were failed by the strand-filter
+1198 variant positions reported (1198 SNP, 0 indel)
+
+real    0m27.239s
+user    0m47.714s
+sys     0m0.824s
+Runtime for mpileup file with 800000 bases
+Only SNPs will be reported
+Min coverage:   8
+Min reads2:     2
+Min var freq:   0.01
+Min avg qual:   15
+P-value thresh: 0.99
+Reading input from mpileupSizes/NA18555-800000.mpileup
+799946 bases in pileup file
+1589 variant positions (1369 SNP, 220 indel)
+7 were failed by the strand-filter
+1364 variant positions reported (1364 SNP, 0 indel)
+
+real    0m39.644s
+user    1m5.801s
+sys     0m0.928s
+Runtime for mpileup file with 900000 bases
+Only SNPs will be reported
+Min coverage:   8
+Min reads2:     2
+Min var freq:   0.01
+Min avg qual:   15
+P-value thresh: 0.99
+Reading input from mpileupSizes/NA18555-900000.mpileup
+899946 bases in pileup file
+1819 variant positions (1563 SNP, 256 indel)
+7 were failed by the strand-filter
+1558 variant positions reported (1558 SNP, 0 indel)
+
+real    0m27.828s
+user    0m51.103s
+sys     0m0.741s

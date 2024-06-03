@@ -6,7 +6,7 @@ FILE=$1
 NAME=$(basename "$FILE" | cut -d'.' -f1)
 REFGENOME=$2
 echo "Running VarScan on $FILE..."
-time java -jar VarScan.jar mpileup2snp .$FILE --min-var-frequency 0.01 --min-freq-for-hom 0.75 \
+time java -jar VarScan.jar mpileup2snp .$FILE --min-var-freq 0.01 --min-freq-for-hom 0.75 \
 --p-value 0.99 --variants --output-vcf 1 > $NAME.vcf
 mkdir -p vcf
 mv $NAME.vcf vcf
