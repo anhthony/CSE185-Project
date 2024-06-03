@@ -9,9 +9,20 @@
 
 `[path-to-ref-genome]` - path to the reference genome. Include `.` in the path and make sure the path is accessible from the `CSE185-Project` folder.
 
-Example usage with provided files in `mpileup`:
+Example usage with provided files in `/mpileup`:
 
 `./testTimeAndAccuracy.sh /mpileup/HG02603.mpileup ./data/hg38.fa`
+
+# compareVCF.py
+
+A python script that compares two input `.vcf` and `.vcfss` file. It outputs the number of variants in each `.vcf/.vcfss` file and the number of variants the `.vcfss` file has that is also in the `.vcf` file. Ensure that the `.vcf/.vcfss` files are from the same dataset with the same optional arguments and input data size.
+
+## Usage
+`python compareVCF.py [.vcf file] [.vcfss file]`
+
+Example usage with provided files in `/vcf` and `/vcfss`:
+
+`python compareVCF.py ./vcf/HG00145.vcf ./vcfss/variants_HG000145.vcfss`
 
 # makePileUpSizes.sh
 
@@ -21,7 +32,7 @@ Usage: `./makePileUpSizes.sh [ftp link for .cram file] [ref-genome]`
 
 Example usage: `./makePileUpSizes.sh ftp://ftp.sra.ebi.ac.uk/vol1/run/ERR323/ERR3239361/NA18555.final.cram ./data/hg38.fa`
 
-Note: `/mpileupSizes/` is not found since the folder contains big files.
+Note: `/mpileupSizes/` is not included since the folder contains big files.
 
 # runtimeBySizeVarD.sh / runtimeBySizeVarS.sh
 
