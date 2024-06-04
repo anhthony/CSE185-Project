@@ -5,7 +5,7 @@
 ## Usage
 `./testTimeAndAccuracy.sh [path-to-mpileup] [path-to-ref-genome]`
 
-`[path-to-mpileuop]` - path to the `.mpileup` file. Make sure that the path does not include '.' and is accessible from the `analysis` folder.
+`[path-to-mpileup]` - path to the `.mpileup` file. Make sure that the path does not include '.' and is accessible from the `analysis` folder.
 
 `[path-to-ref-genome]` - path to the reference genome. Include `.` in the path and make sure the path is accessible from the `CSE185-Project` folder.
 
@@ -15,7 +15,7 @@ Example usage with provided files in `/mpileup`:
 
 # compareVCF.py
 
-A python script that compares two input `.vcf` and `.vcfss` file. It outputs the number of variants in each `.vcf/.vcfss` file and the number of variants the `.vcfss` file has that is also in the `.vcf` file. Ensure that the `.vcf/.vcfss` files are from the same dataset with the same optional arguments and input data size.
+A python script that compares two input `.vcf` and `.vcfss` file. It outputs the number of variants in each `.vcf/.vcfss` file and the number of variants the `.vcfss` file has that is also in the `.vcf` file. Ensure that the `.vcf/.vcfss` files are from the same dataset with the same optional arguments and input data size when using the variant-calling tools.
 
 ## Usage
 `python compareVCF.py [.vcf file] [.vcfss file]`
@@ -36,9 +36,9 @@ Note: `/mpileupSizes/` is not included since the folder contains big files.
 
 # runtimeBySizeVarD.sh / runtimeBySizeVarS.sh
 
-`runtimeBySizeVarD.sh` is a bash script that runs the 20 `.mpileup` files generated from `.makePileUpSizes.sh` using `VarDetect` with default parameters to get the runtime for each.
+`runtimeBySizeVarD.sh` is a bash script that runs the 20 `.mpileup` files generated from `.makePileUpSizes.sh` using `VarDetect` with default flags to get the runtime for each.
 
-`runtimeBySizeVarS.sh` is a bash script that runs the 20 `.mpileup` files generated from `.makePileUpSizes.sh` using `VarScan` with default parameters to get the runtime for each.
+`runtimeBySizeVarS.sh` is a bash script that runs the 20 `.mpileup` files generated from `.makePileUpSizes.sh` using `VarScan` with default flags to get the runtime for each.
 
 To run, simply execute the script(s), `./runtimeBySizeVarD.sh` or `./runtimeBySizeVarS.sh`.
 
